@@ -23,7 +23,7 @@ Push agent can act as a simple REST API taking messages and responding with anal
 ### Examples:
 
 - Trump Agent
-  ![alt text](https://github.com/bartossh/uncle_good_advice/blob/main/artefacts/trump.png?raw=true)
+  ![alt text](https://github.com/bartossh/uncle_good_advice/blob/master/artefacts/trump.png?raw=true)
 
 - Sentiment Analitics Agent
-  ![alt text](https://github.com/bartossh/uncle_good_advice/blob/main/artefacts/sentiment.png?raw=true)
+  ![alt text](https://github.com/bartossh/uncle_good_advice/blob/master/artefacts/sentiment.png?raw=true)
