@@ -2,7 +2,6 @@
 name = "uncle_good_advice"
 version = "0.1.0"
 edition = "2021"
-authors = ["RedStone <https://redstone.finance>"]
 description = "Application with push and pull capabilites to analyze message using LLM's and other Deep Learning models."
 
 
