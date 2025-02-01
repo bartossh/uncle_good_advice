@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 description = "Application with push and pull capabilites to analyze message using LLM's and other Deep Learning models."
 
+[features]
+integrations = []
 
 [lib]
 name = "uncle_good_advice_lib"
@@ -16,7 +18,13 @@ path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4.5.27", features = ["cargo", "derive"] }
+derive-getters = "0.5.0"
+derive_builder = "0.20.2"
 derive_more = { version = "1.0.0", features = ["full"] }
+dotenv = "0.15.0"
 inquire = "0.7.5"
 kalosm = { version = "0.3.2", features = ["language"] }
+mongodb = "3.2.0"
+serde = { version = "1.0.217", features = ["derive", "serde_derive"] }
+serde_json = "1.0.137"
 tokio = { version = "1.43.0", features = ["full"] }

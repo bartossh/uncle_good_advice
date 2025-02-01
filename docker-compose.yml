@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  mongo-db:
+    image: mongo:latest
+    container_name: uncle_good_advice_dev_db
+    ports:
+      - 27017:27017
+    volumes: 
+      - dev_mongo_data:/data/db
+
+volumes:
+  dev_mongo_data:

@@ -1,7 +1,10 @@
 // Abstractions that settle all the contracts in the uncle_good_advice library.
 // Particular types in the library implement the traits so the dependencies are loosely coupled
-// and can be echanged by any other implementation given by the user.
+// and can be echanged by any other implementation given by the user.;
+use serde::ser::Serialize;
+use serde::Deserialize;
 use std::future::Future;
+use std::u128;
 
 /// Configure requires from entity to be able to return required configuration.
 pub trait Configur {
@@ -35,4 +38,56 @@ pub trait Handler {
     ///
     /// * Future with Success `()` if runner runs without issue or Error `String` with message about failure.
     fn run(&self) -> impl Future<Output = Result<(), String>>;
+}
+
+/// Store requires to have storage capability for the entity. It might be a permanent storage or any form of cache.
+pub trait Store<'a, T>
+where
+    T: Serialize + Deserialize<'a> + Send,
+{
+    /// Saves serializeble entity in to the storage.
+    ///
+    /// # Arguments
+    ///
+    /// * `entity` - serializable entity to be stored.
+    ///
+    /// # Returns
+    ///
+    /// * Future with Success `String` os saved entity ID or Error `String` with message about failure.
+    fn save(&self, entity: &T) -> impl Future<Output = Result<String, String>>;
+
+    /// Read by id serializeble entity from the storage.
+    ///
+    /// # Arguments
+    ///
+    /// * `id` - unique id of the entity.
+    ///
+    /// # Returns
+    ///
+    /// * Future with Success entity of type T from storage
+    /// or Error `String` with message about failure.
+    fn read_by_id(&self, id: &str) -> impl Future<Output = Result<T, String>>;
+
+    /// Reads entities from given time from the storage.
+    ///
+    /// # Arguments
+    ///
+    /// * `timestampms - inclusive timestamp in [ ms ] from which to read entities.
+    ///
+    /// # Returns
+    ///
+    /// * Future with Success `Vec<T> with vector of type T entities
+    /// or Error `String` with message about failure.
+    fn read_from_time(&self, timestamp_ms: u128) -> impl Future<Output = Result<Vec<T>, String>>;
+}
+
+/// Fetcher requires entity to have fetching capability. It shall fetch data from external resource.
+pub trait Fetcher {
+    /// Pulls data from external resource.
+    ///
+    /// # Returns
+    ///
+    /// * Future with Success `impl Serialize` entity from the source
+    /// or Error `String` with message about failure.
+    fn pull(&self) -> impl Future<Output = Result<impl Serialize, String>> + Send;
 }
