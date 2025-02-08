@@ -2,15 +2,35 @@ use derive_builder::Builder;
 use derive_getters::Getters;
 use serde::{Deserialize, Serialize};
 
-/// The sentence being examined and calculation of sentiment for given sentence.
+/// The news response from the service.
 #[derive(
     Debug, Serialize, Deserialize, Clone, PartialEq, PartialOrd, Getters, Default, Builder,
 )]
-pub struct SentimentCollected {
+pub struct NewsResponse {
+    id: String,
+    title: String,
     origin: String,
-    sentence: String,
+    text: String,
+    link: String,
     created_at: u64,
-    result: SentimentResult,
+    coins: Vec<String>,
+    keywords: Vec<String>,
+}
+
+/// The SentimentData contains data about the sentiment.
+#[derive(
+    Debug, Serialize, Deserialize, Clone, PartialEq, PartialOrd, Getters, Default, Builder,
+)]
+pub struct SentimentData {
+    resource_id: String,
+    title: String,
+    origin: String,
+    text: String,
+    link: String,
+    created_at: u64,
+    coins: Vec<String>,
+    keywords: Vec<String>,
+    sentiment: SentimentResult,
 }
 
 /// The sentiment callculation.

@@ -40,7 +40,7 @@ pub trait Handler {
     fn run(&self) -> impl Future<Output = Result<(), String>>;
 }
 
-/// Store requires to have storage capability for the entity. It might be a permanent storage or any form of cache.
+/// Store requires from entity to have storage capability for the entity. It might be a permanent storage or any form of cache.
 pub trait Store<'a, T>
 where
     T: Serialize + Deserialize<'a> + Send,
@@ -76,18 +76,58 @@ where
     ///
     /// # Returns
     ///
-    /// * Future with Success `Vec<T> with vector of type T entities
+    /// * Future with Success `Vec<T> with vector of type `T` entities
     /// or Error `String` with message about failure.
     fn read_from_time(&self, timestamp_ms: u128) -> impl Future<Output = Result<Vec<T>, String>>;
 }
 
-/// Fetcher requires entity to have fetching capability. It shall fetch data from external resource.
-pub trait Fetcher {
+/// Fetcher requires from entity to have fetching capability. It shall fetch data from external resource.
+pub trait Fetcher<'a, T>
+where
+    T: Serialize + Deserialize<'a> + Send,
+{
     /// Pulls data from external resource.
     ///
     /// # Returns
     ///
-    /// * Future with Success `impl Serialize` entity from the source
+    /// * Future with Success `Vec<T>` entities from the source
     /// or Error `String` with message about failure.
-    fn pull(&self) -> impl Future<Output = Result<impl Serialize, String>> + Send;
+    fn pull(&self) -> impl Future<Output = Result<Vec<T>, String>> + Send;
+}
+
+/// FilterStr requires from entity to have capabilities of filtering things from str buffer and returning them as slice of `T` type.
+pub trait FilterStr<'a, T>
+where
+    T: Serialize + Deserialize<'a>,
+{
+    /// Filters data from str.
+    ///
+    /// # Returns
+    ///
+    /// * `Vec<T>` of all filtered entities from the str.
+    fn filter_str(&self, text: &str) -> Vec<T>;
+}
+
+/// ValidatorStrategy requires from entity to provide validation strategy for `T`.
+pub trait ValidatorStrategy<T> {
+    /// Analyzes if value is valid under the specific strategy.
+    ///
+    /// * `value` - Value to be analyzed under specific strategy implementation.
+    ///
+    /// # Returns
+    ///
+    /// * Success `true` if is valid or `false` otherwise.
+    fn is_valid(&self, value: &T) -> bool;
+}
+
+/// ExtractionStrategy requires from entity to extract values `E` from type `T`.
+pub trait ExtractionStrategy<T, E> {
+    /// Extracts values `E` from type `T`.
+    ///
+    /// * `data` - Data type that will be used for values `E` extraction from it.
+    ///
+    /// # Returns
+    ///
+    /// * Vector of `E` data types extracted from given type `T`.
+    fn extract(&self, data: &T) -> Vec<E>;
 }
