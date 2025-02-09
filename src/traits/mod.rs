@@ -17,7 +17,7 @@ pub trait Configur {
 }
 
 /// Advise requires from entity to be able to advise and analyze by responding to given message.
-pub trait Advise<'a> {
+pub trait Advise {
     /// Analyzes the message and responds with message containing the analyze result.
     /// The response message is an human readable text and can be about anything.
     /// Response is dependent totally on the entity capabilitties and setup such as prompt or else.
@@ -27,7 +27,7 @@ pub trait Advise<'a> {
     /// # Returns
     ///
     /// * Future with Success `String` that is an analyze result or Error `String` with message about failure.
-    fn advise_about(&mut self, msg: &str) -> impl Future<Output = Result<String, String>> + Send;
+    fn advise_about(&mut self, msg: &str) -> impl Future<Output = Result<String, String>>;
 }
 
 /// Handler requires from entity to handle the process of the whole program. This can be server, cli tool or cron runner.
@@ -92,7 +92,7 @@ where
     ///
     /// * Future with Success `Vec<T>` entities from the source
     /// or Error `String` with message about failure.
-    fn pull(&self) -> impl Future<Output = Result<Vec<T>, String>> + Send;
+    fn pull(&self) -> impl Future<Output = Result<Vec<T>, String>>;
 }
 
 /// FilterStr requires from entity to have capabilities of filtering things from str buffer and returning them as slice of `T` type.

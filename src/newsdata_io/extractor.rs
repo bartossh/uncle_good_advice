@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use crate::traits::ExtractionStrategy;
 use aho_corasick::AhoCorasick;
 
@@ -9,57 +11,37 @@ pub struct CoinExtractor {
 
 impl CoinExtractor {
     pub fn try_new(coins: &Vec<String>) -> Result<Self, String> {
-        let coins_space = coins
-            .iter()
-            .map(|c| format!(" {c} "))
-            .collect::<Vec<String>>();
-        let coins_dot = coins
-            .iter()
-            .map(|c| format!(" {c}."))
-            .collect::<Vec<String>>();
-        let coins_open_bracket = coins
-            .iter()
-            .map(|c| format!("({c}"))
-            .collect::<Vec<String>>();
-        let coins_close_bracket = coins
-            .iter()
-            .map(|c| format!("{c})"))
-            .collect::<Vec<String>>();
-        let coins_brackets = coins
-            .iter()
-            .map(|c| format!("({c})"))
-            .collect::<Vec<String>>();
-        let coins_brackets_space = coins
-            .iter()
-            .map(|c| format!("( {c} )"))
-            .collect::<Vec<String>>();
-        let mut coins_to_match = Vec::with_capacity(
-            coins_space.len()
-                + coins_dot.len()
-                + coins_open_bracket.len()
-                + coins_close_bracket.len()
-                + coins_brackets.len()
-                + coins_brackets_space.len(),
-        );
-        coins_to_match.extend(coins_space);
-        coins_to_match.extend(coins_dot);
+        let coins_to_match = [
+            (' ', ' '),
+            (' ', '.'),
+            ('(', ','),
+            ('(', ' '),
+            (' ', ')'),
+            ('(', ')'),
+            ('[', ','),
+            ('[', ' '),
+            (' ', ']'),
+            ('[', ']'),
+        ]
+        .iter()
+        .fold(vec![], |acc, (start, stop)| {
+            let mut next_acc = acc;
+            next_acc.extend(
+                coins
+                    .iter()
+                    .map(|c| format!("{start}{c}{stop}").to_string())
+                    .collect::<Vec<String>>(),
+            );
+            next_acc
+        });
 
         let extractor = AhoCorasick::builder()
             .ascii_case_insensitive(true)
             .build(coins_to_match)
             .map_err(|e| format!("{e}"))?;
+        let coins = coins.clone();
 
-        let mut coins_ids = coins.to_owned();
-        coins_ids.extend(coins.clone());
-        coins_ids.extend(coins.clone());
-        coins_ids.extend(coins.clone());
-        coins_ids.extend(coins.clone());
-        coins_ids.extend(coins.clone());
-
-        Ok(Self {
-            extractor,
-            coins: coins_ids,
-        })
+        Ok(Self { extractor, coins })
     }
 }
 
@@ -67,8 +49,10 @@ impl ExtractionStrategy<String, String> for CoinExtractor {
     fn extract(&self, data: &String) -> Vec<String> {
         self.extractor
             .find_iter(data)
-            .map_while(|m| self.coins.get(m.pattern().as_usize()))
+            .map_while(|m| self.coins.get(m.pattern().as_usize() % self.coins.len()))
             .map(|s| s.to_string())
+            .collect::<HashSet<String>>()
+            .into_iter()
             .collect()
     }
 }

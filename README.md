@@ -13,12 +13,13 @@ CLI agent will build model with given prompt and allow to provide conversation w
 
 ### Pull Agent
 
-NOT-IMPLEMENTED
+VERY BASIC IMPLEMENTATION
 
-Pull agent can pull data from any source analyze data and send data to any receiver.
-For example it can act as a X (twitter) bot analyzing data and storing them in database.
-It can analyze sentiment of tweets and re-tweets and alarm anyone about suspicious ones.
-It can as well read data and make reports daily, weekly, etc...
+The Pull agent takes data from any source, such as Twitter or NewsDataIo, to analyze the data and store the results or send them to a receiver.
+
+In its current state, it extracts relevant information such as keywords, coins, title, and text and passes it to the LLama model for sentiment recognition, then prints the results to the console.
+
+The plan is to add storage (already implemented) or a receiver that can handle this data.
 
 ### Push Agent
 
@@ -29,7 +30,10 @@ Push agent can act as a simple REST API taking messages and responding with anal
 ### Examples:
 
 - Trump Agent
-  ![alt text](https://github.com/bartossh/uncle_good_advice/blob/master/artefacts/trump.png?raw=true)
+  ![Trump](https://github.com/bartossh/uncle_good_advice/blob/master/artefacts/trump.png?raw=true)
 
 - Sentiment Analitics Agent
-  ![alt text](https://github.com/bartossh/uncle_good_advice/blob/master/artefacts/sentiment.png?raw=true)
+  ![Sentiemnt example](https://github.com/bartossh/uncle_good_advice/blob/master/artefacts/sentiment.png?raw=true)
+
+- Sentiment Pull Model - Pulls articles and calculates sentiment.
+  ![Sentiment Pull Model](https://github.com/bartossh/uncle_good_advice/blob/master/artefacts/pull_model_sentiment.png?raw=true)

@@ -25,6 +25,7 @@ impl Into<String> for Uri {
     }
 }
 
+#[derive(Debug)]
 pub struct Storage {
     db: Database,
 }

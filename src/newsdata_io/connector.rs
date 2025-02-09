@@ -175,6 +175,7 @@ mod tests {
             "bitcoins".to_string(),
             "ethereums".to_string(),
             "solanas".to_string(),
+            "dogecoin".to_string(),
             "sol".to_string(),
             "btc".to_string(),
             "eth".to_string(),

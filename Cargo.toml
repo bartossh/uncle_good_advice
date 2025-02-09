@@ -6,6 +6,8 @@ description = "Application with push and pull capabilites to analyze message usi
 
 [features]
 integrations = []
+chatmodel = []
+pullmodel = []
 
 [lib]
 name = "uncle_good_advice_lib"

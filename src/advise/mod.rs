@@ -19,7 +19,7 @@ impl Advisor {
     }
 }
 
-impl<'a> Advise<'a> for Advisor {
+impl Advise for Advisor {
     async fn advise_about(&mut self, msg: &str) -> Result<String, String> {
         let mut response_stream = self.chat.add_message(msg);
         let mut bytes: Vec<u8> = Vec::new();
